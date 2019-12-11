@@ -14,7 +14,7 @@
                   type="text"
                   name="name"
                   id="name"
-                  placeholder="Your Name"
+                  placeholder="Your Name *"
                   v-model.lazy="$v.formData.userName.$model"
                   :class="{
                     'error-input': $v.formData.userName.$error && errors
@@ -39,7 +39,7 @@
                   type="email"
                   name="email"
                   id="email"
-                  placeholder="Your Email"
+                  placeholder="Your Email *"
                   :class="{ 'error-input': $v.formData.email.$error && errors }"
                   v-model.lazy="$v.formData.email.$model"
                 />
@@ -66,7 +66,7 @@
                   <div class="error" v-if="!$v.formData.age.integer">
                     age must be integer value
                   </div>
-                  <div class="error" v-if="$v.formData.age.between">
+                  <div class="error" v-if="!$v.formData.age.between">
                     age must be at least
                     {{ $v.formData.age.$params.between.min }}
                   </div>
@@ -78,7 +78,7 @@
                   type="password"
                   name="pass"
                   id="pass"
-                  placeholder="Password"
+                  placeholder="Password *"
                   v-model.lazy="$v.formData.password.$model"
                   :class="{
                     'input-error': $v.formData.password.$error && errors
@@ -102,7 +102,7 @@
                   type="password"
                   name="re_pass"
                   id="re_pass"
-                  placeholder="Repeat your password"
+                  placeholder="Repeat your password *"
                   v-model.lazy="$v.formData.confirmPassword.$model"
                   :class="{
                     'error-input': $v.formData.confirmPassword.$error && errors
