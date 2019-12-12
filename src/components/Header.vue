@@ -5,19 +5,39 @@
     </div>
     <nav>
       <div class="navigators">
-        <div class="item">
+        <div class="item" v-if="!isAuthenticated">
           <router-link to="/signup">Sign Up</router-link>
         </div>
-        <div class="item">
+        <div class="item" v-if="!isAuthenticated">
           <router-link to="/signin">Sign In</router-link>
         </div>
-        <div class="item">
+        <div class="item" v-if="isAuthenticated">
           <router-link to="/dashboard">Dashboard</router-link>
+        </div>
+        <div class="item" v-if="isAuthenticated" @click="onLogOut">
+          <router-link to="/dashboard">Logout</router-link>
         </div>
       </div>
     </nav>
   </header>
 </template>
+<script lang="ts">
+import Vue from "vue";
+import { createNamespacedHelpers } from "vuex";
+
+const { mapGetters, mapActions } = createNamespacedHelpers("Auth");
+export default Vue.extend({
+  computed: { ...mapGetters(["isAuthenticated"]) },
+  methods: {
+    ...mapActions(["logOut"]),
+    onLogOut(): void {
+      this.logOut()
+        .then(res => this.$router.replace("/signin"))
+        .catch(err => console.log(err));
+    }
+  }
+});
+</script>
 <style scoped>
 #header {
   display: flex;
