@@ -15,22 +15,22 @@
                   name="name"
                   id="name"
                   placeholder="Your Name *"
-                  v-model.lazy="$v.formData.userName.$model"
+                  v-model.lazy="$v.formData.name.$model"
                   :class="{
-                    'error-input': $v.formData.userName.$error && errors
+                    'error-input': $v.formData.name.$error && errors
                   }"
                 />
               </div>
               <div v-if="errors">
-                <div class="error" v-if="!$v.formData.userName.required">
+                <div class="error" v-if="!$v.formData.name.required">
                   Name is Required
                 </div>
-                <div class="error" v-if="!$v.formData.userName.minLength">
+                <div class="error" v-if="!$v.formData.name.minLength">
                   Name must have at least
-                  {{ $v.formData.userName.$params.minLength.min }} letters.
+                  {{ $v.formData.name.$params.minLength.min }} letters.
                 </div>
-                <div class="error" v-if="!$v.formData.userName.shape">
-                  Name must like this test or test_test45
+                <div class="error" v-if="!$v.formData.name.shape">
+                  Name must be alphabetic
                 </div>
               </div>
               <div class="form-group">
@@ -58,11 +58,14 @@
                   type="number"
                   name="age"
                   id="age"
-                  placeholder="Your Age"
+                  placeholder="Your Age *"
                   :class="{ 'error-input': $v.formData.age.$error && errors }"
                   v-model="$v.formData.age.$model"
                 />
                 <div v-if="errors">
+                  <div class="error" v-if="!$v.formData.age.required">
+                    email filed is required
+                  </div>
                   <div class="error" v-if="!$v.formData.age.integer">
                     age must be integer value
                   </div>
@@ -151,37 +154,42 @@ import {
   sameAs
 } from "vuelidate/lib/validators";
 import { IFormData } from "@/types";
+import { createNamespacedHelpers } from "vuex";
+
+const { mapActions } = createNamespacedHelpers("Auth");
+
 export default Vue.extend({
   data: () => ({
     formData: {
-      userName: "",
+      name: "",
       email: "",
       password: "",
       confirmPassword: "",
       age: null
     } as IFormData,
     // form state to control errors behavior
-    empty: true,
     errors: false
   }),
   methods: {
+    ...mapActions(["signUp"]),
     onSubmit() {
       if (this.$v.formData) {
-        this.empty = !this.$v.formData.$anyDirty;
         this.errors = this.$v.formData.$invalid;
-        if (!this.empty && !this.errors) {
-          console.log(this.formData);
+        if (!this.errors) {
+          delete this.formData.confirmPassword;
+          this.signUp(this.formData)
+            .then(res => this.$router.push("/dashboard"))
+            .catch(err => console.log(err));
         }
       }
     }
   },
   validations: {
     formData: {
-      userName: {
+      name: {
         required,
         minLength: minLength(4),
-        shape: (value: string): boolean =>
-          /^[a-zA-Z]+([-_][a-zA-Z0-9]+)*$/.test(value)
+        shape: (value: string): boolean => /^[a-zA-Z]+$/.test(value)
       },
       email: {
         required,
@@ -189,6 +197,7 @@ export default Vue.extend({
       },
       age: {
         integer,
+        required,
         between: between(18, 95)
       },
       password: {
