@@ -9,6 +9,8 @@ const actions: ActionTree<IAuthState, any> = {
       commit("AUTH_REQUEST");
       const { user, userToken } = await authRequest("/users", data);
       commit("AUTH_SUCCESS", userToken);
+      authAxios.defaults.headers.common["Authorization"] =
+        "Bearer " + userToken;
     } catch (err) {
       commit("AUTH_ERROR");
       localStorage.removeItem("userToken");
@@ -20,10 +22,23 @@ const actions: ActionTree<IAuthState, any> = {
       commit("AUTH_REQUEST");
       const { user, userToken } = await authRequest("/login", data);
       commit("AUTH_SUCCESS", userToken);
+      authAxios.defaults.headers.common["Authorization"] =
+        "Bearer " + userToken;
     } catch (err) {
       commit("AUTH_ERROR");
       localStorage.removeItem("userToken");
       return Promise.reject(err);
+    }
+  },
+  async logOut({ commit }): Promise<void> {
+    try {
+      const res = await authRequest("/logout");
+      commit("AUTH_LOGOUT");
+      localStorage.removeItem("userToken");
+      delete authAxios.defaults.headers.common["Authorization"];
+      Promise.resolve();
+    } catch (err) {
+      Promise.reject(err);
     }
   }
 };

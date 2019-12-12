@@ -14,6 +14,7 @@ const mutations: MutationTree<IAuthState> = {
   },
   AUTH_LOGOUT(state): void {
     state.token = "";
+    state.status = "";
   }
 };
 

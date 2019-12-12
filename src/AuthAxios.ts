@@ -15,7 +15,7 @@ if (token) {
 
 export const authRequest = async (
   url: string,
-  data: IFormData | ISignInForm
+  data?: IFormData | ISignInForm
 ) => {
   try {
     const res: AxiosResponse<IUser> = await authAxios.post(url, data);

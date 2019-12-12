@@ -6,8 +6,8 @@ import actions from "./actions";
 import mutations from "./mutations";
 
 const state: IAuthState = {
-  token: localStorage.getItem("user-token") || "",
-  status: "error"
+  token: localStorage.getItem("userToken") || "",
+  status: ""
 };
 
 const namespaced = true;

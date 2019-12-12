@@ -6,7 +6,7 @@ export interface IFormData {
   age?: number | null;
 }
 
-export type Tstatus = "loading" | "success" | "error";
+export type Tstatus = "loading" | "success" | "error" | "";
 export interface IAuthState {
   token: string;
   status: Tstatus;
