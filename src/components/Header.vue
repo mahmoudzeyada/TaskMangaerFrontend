@@ -15,7 +15,7 @@
           <router-link to="/dashboard">Dashboard</router-link>
         </div>
         <div class="item" v-if="isAuthenticated" @click="onLogOut">
-          <router-link to="/dashboard">Logout</router-link>
+          <router-link to="#">Logout</router-link>
         </div>
       </div>
     </nav>
@@ -79,7 +79,7 @@ nav {
 
 .item a:hover,
 .item a:active,
-li a.router-link-active {
+.item a.router-link-active {
   color: #750470;
 }
 </style>
