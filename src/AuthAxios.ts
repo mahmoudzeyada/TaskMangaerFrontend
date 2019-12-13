@@ -2,6 +2,7 @@ import axios, { AxiosResponse, AxiosError } from "axios";
 import { IFormData, ISignInForm } from "./types";
 import { IUser } from "./models/User";
 import { IServerError } from "./models/ServerError";
+import store from "./store";
 
 const token = localStorage.getItem("userToken");
 
@@ -13,6 +14,18 @@ if (token) {
   authAxios.defaults.headers.common["Authorization"] = "Bearer " + token;
 }
 
+// interceptor of 401 un authorized errors
+authAxios.interceptors.response.use(undefined, function(err) {
+  return new Promise((resolve, reject) => {
+    if (
+      err.status === 401 &&
+      err.response.data.error === "authentication cardinalities are wrong"
+    ) {
+      store.dispatch("Auth/logOut");
+    }
+    throw err;
+  });
+});
 export const authRequest = async (
   url: string,
   data?: IFormData | ISignInForm
