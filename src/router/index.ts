@@ -18,12 +18,18 @@ const routes = [
   {
     path: "/signin",
     name: "signin",
-    component: SignInPage
+    component: SignInPage,
+    meta: {
+      isAuthenticated: true
+    }
   },
   {
     path: "/signup",
     name: "signUp",
-    component: SignUpPage
+    component: SignUpPage,
+    meta: {
+      isAuthenticated: true
+    }
   },
   {
     path: "/dashboard",
@@ -47,6 +53,12 @@ router.beforeEach((to, from, next) => {
       next();
     } else {
       next("/signin");
+    }
+  } else if (to.matched.some(record => record.meta.isAuthenticated)) {
+    if (store.getters["Auth/isAuthenticated"]) {
+      next("/dashboard");
+    } else {
+      next();
     }
   } else {
     next();

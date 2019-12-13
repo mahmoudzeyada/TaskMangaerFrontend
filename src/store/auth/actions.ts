@@ -32,13 +32,12 @@ const actions: ActionTree<IAuthState, any> = {
   },
   async logOut({ commit }): Promise<void> {
     try {
-      const res = await authRequest("/logout");
       commit("AUTH_LOGOUT");
       localStorage.removeItem("userToken");
+      const res = await authRequest("/logout");
       delete authAxios.defaults.headers.common["Authorization"];
-      Promise.resolve();
     } catch (err) {
-      Promise.reject(err);
+      throw new Error(err);
     }
   }
 };

@@ -33,7 +33,10 @@ export default Vue.extend({
     onLogOut(): void {
       this.logOut()
         .then(res => this.$router.replace("/signin"))
-        .catch(err => console.log(err));
+        .catch(err => {
+          console.log(err);
+          this.$router.replace("/signin");
+        });
     }
   }
 });
