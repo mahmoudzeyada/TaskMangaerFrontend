@@ -11,3 +11,7 @@ export interface IUser {
   user: IUserData;
   token: string;
 }
+
+export interface IForgetPasswordRes {
+  message: string;
+}
