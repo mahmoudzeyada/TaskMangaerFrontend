@@ -1,6 +1,10 @@
 <template>
-  <div class="main">
-    <section class="signup">
+  <div class="signup">
+    <h1 class="subtitle-1 grey--text ">Sign Up</h1>
+    <v-container class="my-5">
+      content
+    </v-container>
+    <!-- <section class="signup">
       <div class="container">
         <div class="signup-content">
           <div class="signup-form">
@@ -140,7 +144,7 @@
           </div>
         </div>
       </div>
-    </section>
+    </section>-->
   </div>
 </template>
 <script lang="ts">

@@ -5,6 +5,9 @@ import HomePage from "@/views/Home/index.vue";
 import SignUpPage from "@/views/SignUp/index.vue";
 import SignInPage from "@/views/SignIn/index.vue";
 import DashboardPage from "@/views/Dashboard/index.vue";
+import ForgetPasswordPage from "@/views/ForgetPassword/index.vue";
+import ProfilePage from "@/views/Profile/index.vue";
+import TaskPage from "@/views/Task/index.vue";
 import store from "@/store";
 
 Vue.use(VueRouter);
@@ -32,9 +35,33 @@ const routes = [
     }
   },
   {
+    path: "/reset-password/:token",
+    name: "reset-password",
+    component: ForgetPasswordPage,
+    meta: {
+      isAuthenticated: true
+    }
+  },
+  {
     path: "/dashboard",
     name: "dashboard",
     component: DashboardPage,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/profile",
+    name: "profile",
+    component: ProfilePage,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/task",
+    name: "task",
+    component: TaskPage,
     meta: {
       requiresAuth: true
     }

@@ -1,5 +1,12 @@
 <template>
-  <section class="sign-in">
+  <div class="signin">
+    <h1 class="subtitle-1 grey--text">Sign In</h1>
+    <v-container class="my-5">
+      content
+    </v-container>
+  </div>
+
+  <!-- <section class="sign-in">
     <div class="container">
       <div class="signin-content">
         <component :is="selectedComponent"></component>
@@ -27,7 +34,7 @@
         </div>
       </div>
     </div>
-  </section>
+  </section> -->
 </template>
 <script lang="ts">
 import Vue from "vue";
@@ -38,10 +45,10 @@ export default Vue.extend({
   data: () => ({
     selectedComponent: "sign-in-form"
   }),
-  components: {
-    SignInForm,
-    ForgetPasswordForm
-  },
+  // components: {
+  //   SignInForm,
+  //   ForgetPasswordForm
+  // },
   created() {
     this.selectedComponent = "sign-in-form";
   }

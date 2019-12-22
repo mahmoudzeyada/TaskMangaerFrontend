@@ -26,6 +26,8 @@ authAxios.interceptors.response.use(undefined, function(err) {
     throw err;
   });
 });
+
+// basic auth request
 export const authRequest = async (
   url: string,
   data?: IFormData | ISignInForm

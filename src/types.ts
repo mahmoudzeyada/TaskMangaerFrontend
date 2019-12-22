@@ -1,3 +1,5 @@
+import ITask from "./models/Task";
+
 export interface IFormData {
   name: string;
   password: string;
@@ -15,4 +17,13 @@ export interface IAuthState {
 export interface ISignInForm {
   payload: string;
   password: string;
+}
+
+export interface IResetPasswordFrom {
+  password: string;
+  confirmPassword: string;
+}
+
+export interface ITasksState {
+  tasks: ITask[];
 }
