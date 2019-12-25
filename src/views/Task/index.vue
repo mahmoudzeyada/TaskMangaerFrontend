@@ -44,18 +44,52 @@
               ></v-date-picker>
             </v-menu>
             <br /><br />
-            <v-row justify="center"
-              ><v-btn
-                class="primary mx-4"
-                :disabled="$v.$invalid || !$v.$dirty || !!dateError"
-                large
-                text
-                >Create</v-btn
-              >
-              <v-btn class="green white--text" large>
-                <v-icon left>add</v-icon>
-                Upload Image
-              </v-btn>
+            <v-row justify="center">
+              <v-col cols="12">
+                <v-btn
+                  class="primary mr-4"
+                  :disabled="$v.$invalid || !$v.$dirty || !!dateError"
+                  large
+                  text
+                  >Create</v-btn
+                >
+                <v-btn class="green white--text" @click="onUpload()" large>
+                  <v-icon left>add</v-icon>
+                  Upload Image
+                </v-btn>
+
+                <input
+                  type="file"
+                  id="fileUpload"
+                  ref="input"
+                  style="display: none;"
+                  accept="image/jpeg, image/png"
+                  @change="selectedImage"
+                />
+              </v-col>
+              <v-col cols="12">
+                <v-card
+                  class="mx-auto"
+                  max-width="344"
+                  outlined
+                  v-if="imagePath"
+                >
+                  <v-app-bar flat class="deep-purple lighten-4">
+                    <v-toolbar-title class="grey--text text-uppercase "
+                      >image task</v-toolbar-title
+                    >
+                    <v-spacer></v-spacer>
+                    <v-icon @click="imagePath=''" style="cursor: pointer;"
+                      >close</v-icon
+                    >
+                  </v-app-bar>
+                  <v-img
+                    max-width="500"
+                    max-height="500"
+                    :src="imagePath"
+                  ></v-img>
+                </v-card>
+              </v-col>
             </v-row>
           </v-col>
         </v-row>
@@ -68,14 +102,32 @@ import Vue from "vue";
 import moment from "moment";
 import { required, maxLength } from "vuelidate/lib/validators";
 
+import { createNamespacedHelpers } from "vuex";
+const { mapActions } = createNamespacedHelpers("Tasks");
+
 export default Vue.extend({
   data: () => ({
     date: new Date().toISOString().substr(0, 10),
     menu1: false,
     content: "",
     description: "",
-    dateError: ""
+    dateError: "",
+    imagePath: ""
   }),
+  methods: {
+    onCreate() {},
+    onUpload() {
+      const inputEl = this.$refs["input"] as HTMLInputElement;
+      inputEl.click();
+    },
+    selectedImage() {
+      const inputEl = this.$refs["input"] as HTMLInputElement;
+      if (inputEl.files && inputEl.files[0]) {
+        const image = inputEl.files[0];
+        this.imagePath = URL.createObjectURL(image);
+      }
+    }
+  },
   validations: {
     content: { required, maxLength: maxLength(200) },
     description: { required, maxLength: maxLength(30) }

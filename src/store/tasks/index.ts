@@ -43,6 +43,15 @@ const actions: ActionTree<ITasksState, any> = {
     } catch (err) {
       return Promise.reject(err.response.data);
     }
+  },
+  async createTask({ commit }, task: ITask) {
+    try {
+      const res: AxiosResponse<ITask> = await authAxios.post("tasks", task);
+      commit("ADD_TASK", res.data);
+      return Promise.resolve();
+    } catch (err) {
+      return Promise.reject(err.response.data);
+    }
   }
 };
 
