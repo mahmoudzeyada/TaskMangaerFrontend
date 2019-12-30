@@ -25,7 +25,10 @@ export default Vue.extend({
     ...mapGetters(["getTasks"])
   },
   created() {
-    this.fetchTasks().catch(err => console.log(err));
+    const tasks = this.getTasks;
+    if (!tasks.length) {
+      this.fetchTasks().catch(err => console.log(err));
+    }
   }
 });
 </script>
