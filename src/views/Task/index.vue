@@ -2,7 +2,7 @@
   <div class="task">
     <h1 class="subtitle-1	grey--text">create a task</h1>
     <v-container class="my-5">
-      <v-form>
+      <v-form v-model="valid">
         <v-row>
           <v-col cols="12" sm="8" offset-sm="2" md="6" offset-md="3">
             <v-text-field
@@ -51,6 +51,7 @@
                   :disabled="$v.$invalid || !$v.$dirty || !!dateError"
                   large
                   text
+                  @click.prevent="onCreate"
                   >Create</v-btn
                 >
                 <v-btn class="green white--text" @click="onUpload()" large>
@@ -79,7 +80,7 @@
                       >image task</v-toolbar-title
                     >
                     <v-spacer></v-spacer>
-                    <v-icon @click="imagePath=''" style="cursor: pointer;"
+                    <v-icon @click="imagePath = ''" style="cursor: pointer;"
                       >close</v-icon
                     >
                   </v-app-bar>
@@ -92,6 +93,18 @@
               </v-col>
             </v-row>
           </v-col>
+          <v-row justify="center">
+            <v-alert
+              :value="alert"
+              color="primary"
+              dark
+              border="top"
+              icon="mdi-home"
+              transition="scale-transition"
+            >
+              the task is created successfully
+            </v-alert>
+          </v-row>
         </v-row>
       </v-form>
     </v-container>
@@ -103,6 +116,8 @@ import moment from "moment";
 import { required, maxLength } from "vuelidate/lib/validators";
 
 import { createNamespacedHelpers } from "vuex";
+import ITask from "../../models/Task";
+import { Validation } from "vuelidate";
 const { mapActions } = createNamespacedHelpers("Tasks");
 
 export default Vue.extend({
@@ -112,10 +127,35 @@ export default Vue.extend({
     content: "",
     description: "",
     dateError: "",
-    imagePath: ""
+    imagePath: "",
+    alert: false,
+    resetForm: false,
+    valid: false
   }),
   methods: {
-    onCreate() {},
+    ...mapActions(["createTask", "addImageTask"]),
+    async onCreate() {
+      const formData: ITask = {
+        content: this.content,
+        description: this.description,
+        dueBy: this.date,
+        completed: false
+      };
+      try {
+        const createdTaskRes: ITask = await this.createTask(formData);
+        if (this.imagePath) {
+          const payload = {
+            taskId: createdTaskRes._id,
+            image: this.$refs["input"]
+          };
+          await this.addImageTask(payload);
+        }
+        this.triggerAlert();
+        this.clearForm();
+      } catch (err) {
+        console.log(err);
+      }
+    },
     onUpload() {
       const inputEl = this.$refs["input"] as HTMLInputElement;
       inputEl.click();
@@ -126,6 +166,19 @@ export default Vue.extend({
         const image = inputEl.files[0];
         this.imagePath = URL.createObjectURL(image);
       }
+    },
+    triggerAlert() {
+      this.alert = true;
+      setTimeout(() => {
+        this.alert = false;
+      }, 3000);
+    },
+    clearForm() {
+      this.$v.$reset();
+      this.content = "";
+      this.description = "";
+      this.imagePath = "";
+      this.date = new Date().toISOString().substr(0, 10);
     }
   },
   validations: {

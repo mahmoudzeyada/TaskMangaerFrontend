@@ -48,6 +48,25 @@ const actions: ActionTree<ITasksState, any> = {
     try {
       const res: AxiosResponse<ITask> = await authAxios.post("tasks", task);
       commit("ADD_TASK", res.data);
+      return Promise.resolve(res.data);
+    } catch (err) {
+      return Promise.reject(err.response.data);
+    }
+  },
+  async addImageTask(
+    { commit },
+    payload: { taskId: number; image: HTMLInputElement }
+  ) {
+    try {
+      const formBody = new FormData();
+      formBody.append("image", (payload.image.files as FileList)[0]);
+      const res: AxiosResponse<ITask> = await authAxios({
+        method: "post",
+        url: `tasks/${payload.taskId}/avatar`,
+        data: formBody,
+        headers: { "Content-type": "multipart/form-data" }
+      });
+      commit("MODIFY_TASK", res.data);
       return Promise.resolve();
     } catch (err) {
       return Promise.reject(err.response.data);

@@ -1,12 +1,12 @@
 export default interface ITask {
-  image: string;
+  image?: string;
   completed: boolean;
-  _id: string;
+  _id?: string;
   description: string;
   content: string;
   dueBy: string;
-  owner: string;
-  createdAt: Date;
-  updatedAt: Date;
-  __v: number;
+  owner?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  __v?: number;
 }
